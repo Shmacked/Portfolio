@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
 
-permissionos:
+permissions:
   contents: read
 
 concurrency:
