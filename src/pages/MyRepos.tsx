@@ -1,8 +1,15 @@
 import React from 'react'
 import axios from 'axios'
 
+interface Repo {
+    id: number;
+    name: string;
+    description?: string;
+    html_url: string;
+}
+
 const MyRepos: React.FunctionComponent = () => {
-    const [repos, setRepos] = React.useState<any[]>([]);
+    const [repos, setRepos] = React.useState<Array<Repo>>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
 
