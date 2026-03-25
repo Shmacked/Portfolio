@@ -2,7 +2,7 @@
 
 ![Node](https://img.shields.io/badge/node-22-339933?logo=node.js)
 [![Deploy workflow](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml)
-[![Website](https://img.shields.io/website?url=https%3A%2F%2FOWNER.github.io%2Fportfolio%2F)](https://Shmacked.github.io/Portfolio/)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2FOWNER.github.io%2FPortfolio%2F)](https://Shmacked.github.io/Portfolio/)
 
 # React + TypeScript + Vite
 
