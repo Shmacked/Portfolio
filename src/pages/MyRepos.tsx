@@ -26,23 +26,20 @@ const MyRepos: React.FunctionComponent = () => {
 
 
     return (
-        <section>
-            <h1 className="mb-8 text-3xl font-bold tracking-tight">
-                My Repos
-            </h1>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col items-center justify-center w-full p-3 mx-auto">
+            <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {loading? skeletons.map((_, i) => (
-                    <article key={i} className='flex min-h-48 flex-col rounded-2xl border border-zinic-200 bg-white p-5 shadow-sm dark:border-zine-900'>
+                    <div key={i} className='flex min-h-48 flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900'>
                         <div className="animate-pulse mb-3 h-6 w-2/3 rounded-md bg-zinc-200 dark:bg-zinc-700"></div>
                         <div className="animate-pulse mb-2 h-4 w-full rounded-md bg-zinc-200 dark:bg-zinc-700"></div>
                         <div className="animate-pulse mb-4 h-4 w-5/6 rounded-md bg-zinc-200 dark:bg-zinc-700"></div>
                         <div className="animate-pulse mt-auto h-9 w-28 roounded-lg bg-zinc-200 dark:bg-zinc-700"></div>
-                    </article>
+                    </div>
                 )):
                 error? <p className="text-red-500">Could not load repositories at this time.</p>:
                 repos.map((repo) => {
                     return (
-                        <article key={repo.id} className="flex min-h-48 flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+                        <div key={repo.id} className="flex min-h-48 flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
                             <h2 className="mb-2 text-xl font-semibold">
                                 {repo.name}
                             </h2>
@@ -53,11 +50,11 @@ const MyRepos: React.FunctionComponent = () => {
                             className="mt-auto inline-flex w-fit items-center rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
                                 View on GitHub
                             </a>
-                        </article>
+                        </div>
                     )
                 })}
             </div>
-        </section>
+        </div>
     )
 }
 
