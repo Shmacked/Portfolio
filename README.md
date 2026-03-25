@@ -1,3 +1,18 @@
+# Portfolio
+
+[![Deploy workflow](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml)
+
+[![Live site](https://img.shields.io/badge/demo-GitHub%20Pages-222?logo=github)](https://Shmacked.github.io/Portfolio/)
+
+[![Website](https://img.shields.io/website?url=https%3A%2F%2FOWNER.github.io%2Fportfolio%2F)](https://Shmacked.github.io/Portfolio/)
+
+![Node](https://img.shields.io/badge/node-22-339933?logo=node.js)
+
+# Portfolio
+
+[![Deploy workflow](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/Shmacked/Portfolio/actions/workflows/deploy.yml)
+[![Live site](https://img.shields.io/badge/site-GitHub%20Pages-222?logo=github)](https://Shmacked.github.io/Portfolio/)
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
