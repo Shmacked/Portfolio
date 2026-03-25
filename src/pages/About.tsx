@@ -1,6 +1,6 @@
 import React from 'react'
 
-const About = () => {
+const About: React.FunctionComponent = () => {
     return (
         <div>
             <h1>
