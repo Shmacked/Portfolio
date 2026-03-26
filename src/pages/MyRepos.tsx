@@ -47,7 +47,7 @@ const MyRepos: React.FC = () => {
                                 {repo.description || 'No description'}
                             </p>
                             <a href={repo.html_url} target="_blank" rel="noopener noreferrer"
-                            className="mt-auto inline-flex w-fit items-center rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white">
+                            className="mt-auto inline-flex w-fit items-center rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-green-500 transition-colors duration-300 hover:delay-700 hover:text-white hover:bg-green-500 dark:hover:bg-green-900">
                                 View on GitHub
                             </a>
                         </div>
