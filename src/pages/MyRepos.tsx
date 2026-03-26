@@ -8,7 +8,7 @@ interface Repo {
     html_url: string;
 }
 
-const MyRepos: React.FunctionComponent = () => {
+const MyRepos: React.FC = () => {
     const [repos, setRepos] = React.useState<Array<Repo>>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);

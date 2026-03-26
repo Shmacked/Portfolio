@@ -1,6 +1,6 @@
 import React from 'react'
 
-const About: React.FunctionComponent = () => {
+const About: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center w-full max-w-6xl p-3 mx-auto">
             <div className="prose dark:prose-invert max-w-none text-left">
