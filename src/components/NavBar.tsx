@@ -16,7 +16,7 @@ const NavBar: React.FunctionComponent = () => {
                         "text-sm font-medium text-zinc-900 dark:text-zinc-100":
                         "text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
                     }>
-                        About
+                        About Me
                     </NavLink>
                     <NavLink to="/my-repos" end className={({isActive}) => isActive ?
                         "text-sm font-medium text-zinc-900 dark:text-zinc-100":
