@@ -111,7 +111,7 @@ code {
   background: var(--code-bg);
 }
 
-@keyframes moon-stroke-fade {
+@keyframes moon-animation {
   0%, 100% { stroke: #6b6375; }
-  50% { stroke: yellow; }
+  25% { stroke: yellow; }
 }

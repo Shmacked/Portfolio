@@ -36,8 +36,8 @@ const NavBar: React.FunctionComponent = () => {
                     
                     <span>
                         {theme === 'dark'?
-                        <Moon className="h-5 w-5 hover:[&>path]:[animation:moon-stroke-fade_1.4s_ease-in-out_infinite]" onClick={() => setTheme('light')} />:
-                        <Sun className="h-5 w-5 transition-transform hover:animate-spin hover:[animation-duration:1.5s] hover:[animation-iteration-count:infinite]" onClick={() => setTheme('dark')} />
+                        <Moon className="h-5 w-5 hover:[&>path]:[animation:moon-animation_2s_ease-in_infinite]" onClick={() => setTheme('light')} />:
+                        <Sun className="h-5 w-5 transition-transform hover:animate-spin hover:stroke-yellow-500 hover:[animation-duration:1.5s] hover:[animation-iteration-count:infinite]" onClick={() => setTheme('dark')} />
                         }
                     </span>
                 </span>
