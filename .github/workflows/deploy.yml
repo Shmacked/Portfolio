@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+      - name: Create 404.html fallback
+        run: cp dist/index.html dist/404.html
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
