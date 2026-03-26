@@ -1,9 +1,9 @@
 import React from 'react';
-import TagCloud, {type TagCloudOptions} from 'TagCloud';
+import TagCloud, {type TagCloud as TagCloudInstance,type TagCloudOptions} from 'TagCloud';
 
 const TextSphere: React.FC<{appState: string}> = ({appState}) => {
     const container = React.useRef<HTMLDivElement>(null);
-    const tagCloud = React.useRef<any>(null);
+    const tagCloud = React.useRef<TagCloudInstance | null>(null);
 
     React.useEffect(() => {
         const el = container.current;        
@@ -18,7 +18,9 @@ const TextSphere: React.FC<{appState: string}> = ({appState}) => {
         if (!el) return;
 
         if (tagCloud.current === null) tagCloud.current = TagCloud([el], texts, options);
-        
+
+        if (tagCloud.current === null) return;
+
         if (appState === 'loaded') tagCloud.current.resume();
         else tagCloud.current.pause();
     }, [appState]);

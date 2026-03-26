@@ -4,7 +4,7 @@ import Home from './pages/Home.tsx'
 import About from './pages/About.tsx'
 import MyRepos from './pages/MyRepos.tsx'
 import NavBar from './components/NavBar.tsx'
-import LoadingScreen, {type LoadingScreenProps} from './components/LoadingScreen.tsx'
+import LoadingScreen from './components/LoadingScreen.tsx'
 import { useState, useEffect } from 'react';
 
 function App() {
