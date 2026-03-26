@@ -4,39 +4,48 @@ import Home from './pages/Home.tsx'
 import About from './pages/About.tsx'
 import MyRepos from './pages/MyRepos.tsx'
 import NavBar from './components/NavBar.tsx'
-import LoadingScreen from './components/LoadingScreen.tsx'
+import LoadingScreen, {type LoadingScreenProps} from './components/LoadingScreen.tsx'
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [appReady, setAppReady] = useState(false);
+  const [appState, setAppState] = useState('loading');
+  const loadingMinMs = 2000;
+  const fadingMinMs = 1000;
 
   useEffect(() => {
-      const minMs = 1200;
       const start = performance.now();
 
-      const finish = () => {
-          const elapsed = performance.now() - start;
-          window.setTimeout(() => setAppReady(true), Math.max(0, minMs - elapsed));
+      const startLoading = () => {
+          const now = performance.now();
+          const elapsed = now - start;
+          window.setTimeout(() => {setAppState('fading'); startFading()}, Math.max(0, loadingMinMs - elapsed));
       }
 
-      if (document.readyState === 'complete') finish();
-      else window.addEventListener('load', finish, {once: true});
+      const startFading = () => {
+          const now = performance.now();
+          const elapsed = now - (start + loadingMinMs);
+          window.setTimeout(() => {setAppState('loaded'); startLoaded()}, Math.max(0, fadingMinMs - elapsed));
+      }
+
+      const startLoaded = () => {
+          console.log('loaded');
+      }
+
+      if (document.readyState === 'complete') startLoading();
+      else window.addEventListener('load', startLoading, {once: true});
   }, []);
 
   return (
     <>
-      {!appReady? (
-        <LoadingScreen />
-      ): (
+        <LoadingScreen appState={appState} fadingMinMs={fadingMinMs} />
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <NavBar />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home appState={appState} />} />
             <Route path="/about" element={<About />} />
             <Route path="/my-repos" element={<MyRepos />} />
           </Routes>
         </BrowserRouter>
-      )}
     </>
   )
 }
