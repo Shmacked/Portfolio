@@ -49,7 +49,7 @@ const MyRepos: React.FC = () => {
 
                         const total = entries.reduce((acc, [, bytes]) => acc + bytes, 0);
 
-                        entries.forEach(([language, bytes]) => {
+                        entries.forEach(([language, _]) => {
                             if (!colorMap[language]) colorMap[language] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
                         });
 
@@ -70,7 +70,7 @@ const MyRepos: React.FC = () => {
     return (
         <>
             {!loading && !error && Object.keys(languageColors).length > 0?
-                <div className="flex flex-row mx-auto items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+                <div className="flex flex-row mx-auto my-5 items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                     <ul className="flex flex-row gap-2">
                     {Object.keys(languageColors).map((language: string) => (
                         <li key={language} className="font-semibold" style={{color: languageColors[language]}}>
