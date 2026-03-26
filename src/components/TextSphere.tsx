@@ -26,8 +26,8 @@ const TextSphere: React.FC<{appState: string}> = ({appState}) => {
     }, [appState]);
 
   return (
-    <div className="text-sphere flex select-none w-full justify-center items-center">
-      <span ref={container} className="tagcloud"></span>
+    <div className="text-sphere flex select-none w-full justify-center items-center overflow-hidden">
+      <div ref={container} className="tagcloud"></div>
     </div>
   );
 };
