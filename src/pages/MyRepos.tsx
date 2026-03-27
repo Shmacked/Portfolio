@@ -57,14 +57,13 @@ const MyRepos: React.FC = () => {
             let reposResponse: AxiosResponse<Array<Repo>>;
             try {
                 reposResponse = await axios.get<Repo[]>('https://api.github.com/users/Shmacked/repos')
-            } catch (error) {
+            } catch {
                 setError(true);
                 setLoading(false);
                 return;
             }
             
-            reposResponse.status !== 200 && setError(true);
-            if (reposResponse.status !== 200) return;
+            if (reposResponse.status !== 200) return setError(true);
 
             const baseRepos = reposResponse.data.map((r: Repo) => ({...r, languages: null as Repo["languages"]}));
             const reposWithLanguages = await Promise.all(
@@ -77,7 +76,7 @@ const MyRepos: React.FC = () => {
 
                         const total = entries.reduce((acc, [, bytes]) => acc + bytes, 0);
 
-                        entries.forEach(([language, _bytes]) => {
+                        entries.forEach(([language]) => {
                             if (colorMap[language]) return;
                             const randomNumber = Math.floor(Math.random() * possibleColors.length);
                             colorMap[language] = possibleColors[randomNumber];
@@ -104,7 +103,7 @@ const MyRepos: React.FC = () => {
                 <div className="flex flex-row mx-auto my-5 items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                     <ul className="flex flex-row gap-2">
                     {Object.keys(languageColors).map((language: string) => (
-                        <li key={language} className="font-semibold" style={{color: languageColors[language]}}>
+                        <li key={language} className="font-semibold bg-zinc-700 dark:bg-zinc-100 p-2" style={{color: languageColors[language]}}>
                             {language}
                         </li>
                     ))}
