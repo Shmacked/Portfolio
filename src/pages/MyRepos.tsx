@@ -27,31 +27,55 @@ const MyRepos: React.FC = () => {
 
     const skeletons = Array.from({ length: 9 });
 
+    const possibleColors = [
+        '#ef4444',
+        '#22c55e',
+        '#3b82f6',
+        '#8b5cf6',
+        '#f59e0b',
+        '#ec4899',
+        '#10b981',
+        '#6366f1',
+        '#8b5cf6',
+        '#f59e0b',
+        '#ec4899',
+        '#10b981',
+        '#6366f1',
+        '#8b5cf6',
+        '#f59e0b',
+        '#ec4899',
+        '#10b981',
+        '#6366f1',
+    ];
+
+    const getColor = async (language: string) => {
+        return axios.get('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json').then((response) => {
+            const data = response.data;
+            const color = data[language].color;
+            return color;
+        });
+    }
+    
+    const invertColor = (language: string) => {
+        const hex = languageColors[language];
+        const clean = hex.replace('#', '')
+        const full = clean.length === 3
+          ? clean.split('').map((c) => c + c).join('')
+          : clean
+        const r = 255 - parseInt(full.slice(0, 2), 16)
+        const g = 255 - parseInt(full.slice(2, 4), 16)
+        const b = 255 - parseInt(full.slice(4, 6), 16)
+        const toHex = (n: number) => n.toString(16).padStart(2, '0')
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+    }
+
     React.useEffect(() => {
         setError(false);
         setLoading(true);
         setRepos([]);
+        const colors: Array<Promise<string>> = [];
         const colorMap: LanguageColors = {};
-        const possibleColors = [
-            'red',
-            'green',
-            'blue',
-            'yellow',
-            'purple',
-            'orange',
-            'pink',
-            'brown',
-            'gray',
-            'black',
-            'white',
-            'cyan',
-            'magenta',
-            'lime',
-            'teal',
-            'indigo',
-            'violet',
-            'pink',
-        ];
+        // const possibleColorsCopy = [...possibleColors];
 
         const run = async () => {
             let reposResponse: AxiosResponse<Array<Repo>>;
@@ -76,11 +100,19 @@ const MyRepos: React.FC = () => {
 
                         const total = entries.reduce((acc, [, bytes]) => acc + bytes, 0);
 
+                        // entries.forEach(([language]) => {
+                        //     if (colorMap[language]) return;
+                        //     const randomNumber = Math.floor(Math.random() * possibleColorsCopy.length);
+                        //     colorMap[language] = possibleColorsCopy[randomNumber];
+                        //     possibleColorsCopy.splice(randomNumber, 1);
+                        // });
+
                         entries.forEach(([language]) => {
                             if (colorMap[language]) return;
-                            const randomNumber = Math.floor(Math.random() * possibleColors.length);
-                            colorMap[language] = possibleColors[randomNumber];
-                            possibleColors.splice(randomNumber, 1);
+                            colors.push(getColor(language).then((color) => {
+                                colorMap[language] = color;
+                                return color;
+                            }));
                         });
 
                         return {...repo, languages: entries.map(([language, bytes]) => ({language, percentage: (bytes / total) * 100}))}
@@ -91,19 +123,30 @@ const MyRepos: React.FC = () => {
             );
             setRepos(reposWithLanguages);
             setLoading(false);
-            setLanguageColors(colorMap);
+            Promise.all(colors).then(() => {
+                setLanguageColors(colorMap);
+                console.log(colorMap);
+            });
         };
         run();
     }, [])
 
-
     return (
         <>
-            {!loading && !error && Object.keys(languageColors).length > 0?
-                <div className="flex flex-row mx-auto my-5 items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+            {!loading && !error && Object.keys(languageColors).length > 0 ?
+                <div className="flex flex-row my-5 items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                     <ul className="flex flex-row gap-2">
                     {Object.keys(languageColors).map((language: string) => (
-                        <li key={language} className="font-semibold bg-zinc-700 dark:bg-zinc-100 p-2" style={{color: languageColors[language]}}>
+                        <li key={language} className="font-semibold p-2"
+                            style=
+                                {{
+                                    color: languageColors[language],
+                                    textShadow:
+                                        `0 0 1px ${invertColor(language)},
+                                        0 0 2px ${invertColor(language)},
+                                        0 0 3px ${invertColor(language)},
+                                        0 0 4px ${invertColor(language)}`
+                                }}>
                             {language}
                         </li>
                     ))}
