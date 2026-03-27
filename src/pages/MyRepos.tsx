@@ -8,6 +8,7 @@ interface Repo {
     description?: string;
     html_url: string;
     languages: Array<Language> | null;
+    toggle: boolean; // whether the description is shown or the languages are shown
 }
 
 interface Language {
@@ -24,29 +25,17 @@ const MyRepos: React.FC = () => {
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(false);
     const [languageColors, setLanguageColors] = React.useState<LanguageColors>({});
+    const [hoveredByRepo, setHoveredByRepo] = React.useState<Record<number, { language: string | null, type: "bar" | "language" | null }>>({});
+
+    const setHovered = (repoId: number, language: string | null, type: "bar" | "language" | null) => {
+        setHoveredByRepo((prev) => ({ ...prev, [repoId]: { language, type }}))
+    };
+
+    const setToggle = (repoId: number, toggle: boolean) => {
+        setRepos((prev) => prev.map((repo) => repo.id === repoId ? {...repo, toggle} : repo));
+    };
 
     const skeletons = Array.from({ length: 9 });
-
-    // const possibleColors = [
-    //     '#ef4444',
-    //     '#22c55e',
-    //     '#3b82f6',
-    //     '#8b5cf6',
-    //     '#f59e0b',
-    //     '#ec4899',
-    //     '#10b981',
-    //     '#6366f1',
-    //     '#8b5cf6',
-    //     '#f59e0b',
-    //     '#ec4899',
-    //     '#10b981',
-    //     '#6366f1',
-    //     '#8b5cf6',
-    //     '#f59e0b',
-    //     '#ec4899',
-    //     '#10b981',
-    //     '#6366f1',
-    // ];
 
     const getColor = async (language: string) => {
         return axios.get('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json').then((response) => {
@@ -57,6 +46,7 @@ const MyRepos: React.FC = () => {
     }
     
     const invertColor = (language: string) => {
+        if (!languageColors[language]) return '#000000';
         const hex = languageColors[language];
         const clean = hex.replace('#', '')
         const full = clean.length === 3
@@ -68,6 +58,7 @@ const MyRepos: React.FC = () => {
         const toHex = (n: number) => n.toString(16).padStart(2, '0')
         return `#${toHex(r)}${toHex(g)}${toHex(b)}`
     }
+    invertColor('JavaScript');
 
     React.useEffect(() => {
         setError(false);
@@ -75,7 +66,6 @@ const MyRepos: React.FC = () => {
         setRepos([]);
         const colors: Array<Promise<string>> = [];
         const colorMap: LanguageColors = {};
-        // const possibleColorsCopy = [...possibleColors];
 
         const run = async () => {
             let reposResponse: AxiosResponse<Array<Repo>>;
@@ -89,7 +79,7 @@ const MyRepos: React.FC = () => {
             
             if (reposResponse.status !== 200) return setError(true);
 
-            const baseRepos = reposResponse.data.map((r: Repo) => ({...r, languages: null as Repo["languages"]}));
+            const baseRepos = reposResponse.data.map((r: Repo) => ({...r, languages: null as Repo["languages"], toggle: false}));
             const reposWithLanguages = await Promise.all(
                 baseRepos.map(async (repo) => {
                     try {
@@ -99,13 +89,6 @@ const MyRepos: React.FC = () => {
                         if (entries.length === 0) return {...repo, languages: []}
 
                         const total = entries.reduce((acc, [, bytes]) => acc + bytes, 0);
-
-                        // entries.forEach(([language]) => {
-                        //     if (colorMap[language]) return;
-                        //     const randomNumber = Math.floor(Math.random() * possibleColorsCopy.length);
-                        //     colorMap[language] = possibleColorsCopy[randomNumber];
-                        //     possibleColorsCopy.splice(randomNumber, 1);
-                        // });
 
                         entries.forEach(([language]) => {
                             if (colorMap[language]) return;
@@ -133,28 +116,6 @@ const MyRepos: React.FC = () => {
 
     return (
         <>
-            {!loading && !error && Object.keys(languageColors).length > 0 ?
-                <div className="flex flex-row my-5 items-center justify-center gap-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-                    <ul className="flex flex-row gap-2">
-                    {Object.keys(languageColors).map((language: string) => (
-                        <li key={language} className="font-semibold p-2"
-                            style=
-                                {{
-                                    color: languageColors[language],
-                                    textShadow:
-                                        `0 0 1px ${invertColor(language)},
-                                        0 0 2px ${invertColor(language)},
-                                        0 0 3px ${invertColor(language)},
-                                        0 0 4px ${invertColor(language)}`
-                                }}>
-                            {language}
-                        </li>
-                    ))}
-                    </ul>
-                </div>:
-                <></>
-            }
-
             <div className="flex flex-col items-center justify-center w-full p-3 mx-auto">
                 <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {loading? skeletons.map((_, i) => (
@@ -167,29 +128,68 @@ const MyRepos: React.FC = () => {
                     )):
                     error? <p className="text-red-500">Could not load repositories at this time.</p>:
                     repos.map((repo) => {
+                        const hoveredLanguage = hoveredByRepo[repo.id];
                         return (
                             <div key={repo.id} className="flex min-h-60 flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900">
                                 <h2 className="mb-2 text-xl font-semibold">
                                     {repo.name}
                                 </h2>
-                                <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-300">
-                                    {repo.description || 'No description'}
-                                </p>
+                                <div className="relative mb-4 min-h-[5rem] w-full">
+                                    <p
+                                        className={`absolute inset-x-0 top-0 text-left text-sm text-zinc-600 transition-opacity duration-300 dark:text-zinc-300 ${
+                                        repo.toggle ? 'pointer-events-none opacity-0' : 'opacity-100'
+                                        }`}
+                                    >
+                                        {repo.description || 'No description'}
+                                    </p>
+                                    <div
+                                        className={`absolute inset-x-0 top-0 flex flex-row flex-wrap gap-2 transition-opacity duration-300 ${
+                                        repo.toggle ? 'opacity-100' : 'pointer-events-none opacity-0'
+                                        }`}
+                                    >
+                                        {repo.languages && [...repo.languages].sort((a, b) => b.percentage - a.percentage).map((language) => (
+                                            <span key={language.language} className={`flex flex-row items-center gap-2 ${hoveredLanguage?.language === language.language && hoveredLanguage?.type === "bar" ? 'bg-zinc-200 dark:bg-zinc-700' : ''}`}
+                                                onMouseEnter={() => setHovered(repo.id, language.language, "language")}
+                                                onMouseLeave={() => setHovered(repo.id, null, null)}>
+                                                <span className="border rounded-full w-2 h-2 select-none" style={{backgroundColor: languageColors[language.language]}}></span>
+                                                <span className="text-xs text-black dark:text-white select-none">{language.language}</span>
+                                                <span className="text-xs text-black dark:text-white select-none">{Math.round(language.percentage)}%</span>
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div className="flex flex-col gap-2 mt-auto">
                                     <div className="flex h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700 border border-black dark:border-white">
-                                    {repo.languages && repo.languages.sort((a, b) => b.percentage - a.percentage).map((language) => (
+                                    {repo.languages && [...repo.languages].sort((a, b) => b.percentage - a.percentage).map((language) => (
                                         <div
                                             key={language.language}
-                                            className="h-full shrink-0"
+                                            className={`h-full shrink-0`}
+                                            onMouseEnter={() => setHovered(repo.id, language.language, "bar")}
+                                            onMouseLeave={() => setHovered(repo.id, null, null)}
                                             title={`${language.language} · ${Math.round(language.percentage)}%`}
-                                            style={{width: `${language.percentage}%`, backgroundColor: languageColors[language.language]}}
+                                            style={{
+                                                width: `${language.percentage}%`,
+                                                backgroundColor: languageColors[language.language],
+                                                opacity: `${hoveredLanguage?.language === language.language && hoveredLanguage?.type === null ? '1' : hoveredLanguage?.language !== language.language && hoveredLanguage?.type === "language"? '0' : '1'}`,
+                                            }}
                                         />
                                     ))}
                                     </div>
+                                </div>
+                                <div className="mt-auto inline-flex w-fit ">
                                     <a href={repo.html_url} target="_blank" rel="noopener noreferrer"
-                                    className="mt-auto inline-flex w-fit items-center rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-green-500 transition-colors duration-300 hover:delay-700 hover:text-white hover:bg-green-500 dark:hover:bg-green-900">
+                                    className="items-center rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white transition dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-green-500 transition-colors duration-300 hover:delay-700 hover:text-white hover:bg-green-500 dark:hover:bg-green-900">
                                         View on GitHub
                                     </a>
+                                    {repo.toggle ? (
+                                        <span className="items-center px-3 py-2 text-sm font-medium transition-colors hover:text-green-500 dark:hover:text-green-900" onClick={() => setToggle(repo.id, false)}>
+                                            View Description
+                                        </span>
+                                    ) : (
+                                        <span className="items-center px-3 py-2 text-sm font-medium transition-colors hover:text-green-500 dark:hover:text-green-900" onClick={() => setToggle(repo.id, true)}>
+                                            View Languages
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         )
