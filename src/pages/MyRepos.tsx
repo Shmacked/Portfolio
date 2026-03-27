@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import type { AxiosResponse } from 'axios'
 
 interface Repo {
     id: number;
@@ -31,9 +32,36 @@ const MyRepos: React.FC = () => {
         setLoading(true);
         setRepos([]);
         const colorMap: LanguageColors = {};
+        const possibleColors = [
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'purple',
+            'orange',
+            'pink',
+            'brown',
+            'gray',
+            'black',
+            'white',
+            'cyan',
+            'magenta',
+            'lime',
+            'teal',
+            'indigo',
+            'violet',
+            'pink',
+        ];
 
         const run = async () => {
-            const reposResponse = await axios.get<Repo[]>('https://api.github.com/users/Shmacked/repos')
+            let reposResponse: AxiosResponse<Array<Repo>>;
+            try {
+                reposResponse = await axios.get<Repo[]>('https://api.github.com/users/Shmacked/repos')
+            } catch (error) {
+                setError(true);
+                setLoading(false);
+                return;
+            }
             
             reposResponse.status !== 200 && setError(true);
             if (reposResponse.status !== 200) return;
@@ -49,8 +77,11 @@ const MyRepos: React.FC = () => {
 
                         const total = entries.reduce((acc, [, bytes]) => acc + bytes, 0);
 
-                        entries.forEach(([language, _]) => {
-                            if (!colorMap[language]) colorMap[language] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                        entries.forEach(([language, _bytes]) => {
+                            if (colorMap[language]) return;
+                            const randomNumber = Math.floor(Math.random() * possibleColors.length);
+                            colorMap[language] = possibleColors[randomNumber];
+                            possibleColors.splice(randomNumber, 1);
                         });
 
                         return {...repo, languages: entries.map(([language, bytes]) => ({language, percentage: (bytes / total) * 100}))}
@@ -103,7 +134,7 @@ const MyRepos: React.FC = () => {
                                     {repo.description || 'No description'}
                                 </p>
                                 <div className="flex flex-col gap-2 mt-auto">
-                                    <div className="flex h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                                    <div className="flex h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700 border border-black dark:border-white">
                                     {repo.languages && repo.languages.sort((a, b) => b.percentage - a.percentage).map((language) => (
                                         <div
                                             key={language.language}
