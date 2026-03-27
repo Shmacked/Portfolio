@@ -27,26 +27,26 @@ const MyRepos: React.FC = () => {
 
     const skeletons = Array.from({ length: 9 });
 
-    const possibleColors = [
-        '#ef4444',
-        '#22c55e',
-        '#3b82f6',
-        '#8b5cf6',
-        '#f59e0b',
-        '#ec4899',
-        '#10b981',
-        '#6366f1',
-        '#8b5cf6',
-        '#f59e0b',
-        '#ec4899',
-        '#10b981',
-        '#6366f1',
-        '#8b5cf6',
-        '#f59e0b',
-        '#ec4899',
-        '#10b981',
-        '#6366f1',
-    ];
+    // const possibleColors = [
+    //     '#ef4444',
+    //     '#22c55e',
+    //     '#3b82f6',
+    //     '#8b5cf6',
+    //     '#f59e0b',
+    //     '#ec4899',
+    //     '#10b981',
+    //     '#6366f1',
+    //     '#8b5cf6',
+    //     '#f59e0b',
+    //     '#ec4899',
+    //     '#10b981',
+    //     '#6366f1',
+    //     '#8b5cf6',
+    //     '#f59e0b',
+    //     '#ec4899',
+    //     '#10b981',
+    //     '#6366f1',
+    // ];
 
     const getColor = async (language: string) => {
         return axios.get('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json').then((response) => {
