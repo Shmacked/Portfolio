@@ -6,10 +6,10 @@ const About: React.FC = () => {
             <div className="prose dark:prose-invert max-w-none text-left">
                 <div className="flex flex-col gap-4">
                     <p className="indent-4">
-                        I am a Software Engineer specializing in bridging the gap between modern cloud infrastructure and 
+                        I am a Full Stack Developer specializing in bridging the gap between modern cloud infrastructure and 
                         complex hardware integration. Since 2019, I have focused on building end-to-end systems that solve 
                         long-standing technical challenges, most notably developing a programmatic interface for legacy engraving 
-                        machinery—a hurdle that had persisted in the industry for over 15 years.
+                        machinery - a hurdle that had persisted in the industry for over 15 years.
                     </p>
 
                     <p className="indent-4">
@@ -20,7 +20,7 @@ const About: React.FC = () => {
                     </p>
 
                     <p className="indent-4">
-                        Recently, I have pivoted into the Agentic AI space, gaining deep technical expertise in building sophisticated 
+                        Recently, I have pivoted into the Agentic AI space and machine learning, gaining deep technical expertise in building sophisticated 
                         autonomous workflows. My current toolkit includes:
                     </p>
 
@@ -29,7 +29,7 @@ const About: React.FC = () => {
                             <span className="font-bold">
                                 AI & LLM Orchestration:&nbsp;
                             </span>
-                            Generative AI, LangChain, LangGraph, OpenAI Agents SDK, CrewAI, and RAG pipelines.
+                            Generative AI, LangChain, LangGraph, OpenAI Agents SDK, CrewAI, RAG pipelines, and PyTorch.
                         </li>
                         <li>
                             <span className="font-bold">
