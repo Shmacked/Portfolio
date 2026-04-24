@@ -8,7 +8,7 @@ const TextSphere: React.FC<{appState: string}> = ({appState}) => {
     React.useEffect(() => {
         const el = container.current;        
         const texts = (
-            "Generative AI, Agentic AI, LangChain, LangGraph, OpenAI Agents SDK, CrewAI, RAG," +
+            "Generative AI, Agentic AI, LangChain, LangGraph, OpenAI Agents SDK, CrewAI, RAG, PyTorch," +
             "Python, FastAPI, Django, Celery, Rust, AWS, Docker, Linux," +
             "PostgreSQL, Chroma DB, Redis, SQLAlchemy," +
             "React, TypeScript, JavaScript, Bootstrap 5, Tailwind CSS, jQuery,"
