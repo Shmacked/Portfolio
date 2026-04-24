@@ -20,7 +20,7 @@ const About: React.FC = () => {
                     </p>
 
                     <p className="indent-4">
-                        Recently, I have pivoted into the Agentic AI space and machine learning, gaining deep technical expertise in building sophisticated 
+                        Recently, I have pivoted into the Agentic AI and machine learning space, gaining deep technical expertise in building sophisticated 
                         autonomous workflows. My current toolkit includes:
                     </p>
 
