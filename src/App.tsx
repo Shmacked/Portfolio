@@ -6,6 +6,7 @@ import MyRepos from './pages/MyRepos.tsx'
 import NavBar from './components/NavBar.tsx'
 import LoadingScreen from './components/LoadingScreen.tsx'
 import { useState, useEffect } from 'react';
+import Footer from './components/Footer.tsx'
 
 function App() {
   const [appState, setAppState] = useState('loading');
@@ -39,12 +40,17 @@ function App() {
     <>
         <LoadingScreen appState={appState} fadingMinMs={fadingMinMs} />
         <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home appState={appState} />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/my-repos" element={<MyRepos />} />
-          </Routes>
+          <div className="flex min-h-dvh flex-col">
+            <NavBar />
+            <main className="flex min-h-0 flex-1 flex-col">
+              <Routes>
+                <Route path="/" element={<Home appState={appState} />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/my-repos" element={<MyRepos />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
         </BrowserRouter>
     </>
   )
